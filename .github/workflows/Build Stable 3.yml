@@ -26,16 +26,17 @@ jobs:
     - name: Download kernel source
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        git clone https://github.com/PixelExperience-Devices/kernel_xiaomi_lisa.git
+        git clone https://github.com/likkai/ksu_kernel_xiaomi_lisa.git --depth=1
         
     - name: Integrate KernelSU
       run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace/kernel_xiaomi_lisa
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s builtin
+        cd $GITHUB_WORKSPACE/kernel_workspace/ksu_kernel_xiaomi_lisa
+        rm -rf KernelSU/
+        curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/dev-susfs/kernel/setup.sh" | bash -
         
     - name: Compiling Kernel
       run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace/kernel_xiaomi_lisa
+        cd $GITHUB_WORKSPACE/kernel_workspace/ksu_kernel_xiaomi_lisa
         chmod +x build.sh
         ./build.sh
         filename=$(find . -name Quick* -printf '%f\n')
@@ -46,4 +47,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: QuicksilveR_KernelSU
-        path: ${{ github.workspace }}/kernel_workspace/kernel_xiaomi_lisa/${{ env.FILENAME }}
+        path: ${{ github.workspace }}/kernel_workspace/ksu_kernel_xiaomi_lisa/${{ env.FILENAME }}
